@@ -5,13 +5,11 @@ export default class BookItem extends Component{
 
     constructor(props){
         super(props);
-        this.state = {};
+        this.state = {show: false};
     }
 
 
     submit = () =>{
-        console.log("Title: " + this.state.title)
-        console.log("Author: " + this.state.author)
         this.props.submitFunc(this.state.title, this.state.author);
     } 
     
@@ -23,24 +21,26 @@ export default class BookItem extends Component{
         this.setState({author: input})
     }
 
+    changeShowState = () =>{
+      this.setState({show: !this.state.show});
+    }
+
     render(props){
         return (
-            <form className="book-form col-6">
-              <legend>Lägg till dina favoritböcker</legend>
+            <div>
               <div className="form-group">
-
                 <TextField id="title" placeholder="Lägg till titel" listenerFunc={this.updateTitle} />
                 <TextField id="author" placeholder="Lägg till författare" listenerFunc={this.updateAuthor} />
               </div>
               <button
-                type="submit"
+                type="button"
                 className="btn btn-primary btn-lg btn-block"
                 id="submitbtn"
                 onClick={this.submit} 
               >
                 Skicka
               </button>
-            </form>
+            </div>
         )
     }
 

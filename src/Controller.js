@@ -5,15 +5,22 @@ export default class Controller{
 
     static requestKey = async () => {
         let key = localStorage.getItem('apiKey');
+        if (key === null){
+            key = this.setNewKey();
+        }
+        return key;
+        
+    }
+
+    static setNewKey = async () => {
+        let key = null;
         while (key === null){
-            let result = await this.access("requestKey");
+            let result = await this.access(`requestKey`)
             key = result.key;
             if (result.status === "success"){
                 localStorage.setItem('apiKey', key);
             }
         }
-        return key;
-        
     }
  
     static submit = async (title, author) => {
@@ -38,13 +45,18 @@ export default class Controller{
             result = await fetch(`https://www.forverkliga.se/JavaScript/api/crud.php?${requestString}`)
             .then(response => response.json())
             i++;
-        } while(result.status !== "success" && i<10);
+        } while(result.status !== "success" && i<15);
         return result;
     }
 
     static deleteBook = async (id) =>{
         let key = await this.requestKey();
         this.access(`key=${key}&op=delete&id=${id}`);
+    }
+
+    static edit = async (id, title, author) => {
+        let key = await this.requestKey();
+        this.access(`key=${key}&op=update&id=${id}&title=${title}&author=${author}`);
     }
 
     

@@ -12,7 +12,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  background: linear-gradient(135deg, #024959, #012027) no-repeat;
+  background-image: url(../snowy-landscape.jpg);
+  background-size: 100%;
 }
 
 code {
