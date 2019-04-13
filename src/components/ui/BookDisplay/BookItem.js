@@ -2,34 +2,35 @@ import React, {Component} from 'react'
 import TextField from '../Form/TextField'
 
 export default class BookItem extends Component{
-
+   
     constructor(props){
         super(props);
-        this.state = {edit: false}
+        this.state = {
+            edit: false,
+             // Se till att state som används i komponenten deklareras i konstruktor
+             // Introducera inte nya "on the fly"
+            title: this.props.title, 
+            author: this.props.author
+        }
     }
 
-    componentDidMount(){
-        this.setState({title: this.props.title, author: this.props.author});
-    }
-
-    delete = ()=>{
+    delete = () => {
         this.props.deleteFunc(this.props.id);
     }
 
-    editButton = async ()=>{
+    editButton = () => {
         if (this.state.edit){
-            await this.setState({title: this.state.editedTitle, author: this.state.editedAuthor});
-            this.props.submitEditFunc(this.props.id, this.state.title, this.state.author);
+           this.props.submitEditFunc(this.props.id, this.state.title, this.state.author);
         }
-        this.setState({edit: !this.state.edit, editedAuthor: this.state.author, editedTitle: this.state.title});
+        this.setState({edit: !this.state.edit});
     }
 
     titleListener = (input)=>{
-        this.setState({editedTitle: input})
+        this.setState({title: input})
     }
 
     authorListener = (input)=>{
-        this.setState({editedAuthor: input})
+        this.setState({author: input})
     }
 
     render(props){
