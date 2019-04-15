@@ -4,9 +4,9 @@ import TextField from '../Form/TextField'
 
 export default class BookList extends Component{
 
-
-    constructor(){
-        super();
+    // Props ska alltid deklareras 
+    constructor(props){
+        super(props);
         this.state = {searchString: ""};
     }
 

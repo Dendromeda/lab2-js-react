@@ -2,55 +2,56 @@ import React, { Component } from 'react'
 import Header from './components/ui/Header/Header'
 import BookList from './components/ui/BookDisplay/BookList'
 import FormGroup from './components/ui/Form/FormGroup'
-import Controller from './Controller'
+import * as controller from './controller'
 
 class App extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {showForm: true, list: []};
+    this.state = {
+      showForm: true, 
+      list: [],
+      key: ''
+    };
   }
 
-  async componentDidMount(){
-    let bookList = await Controller.fetchBooks();
-    this.setState({list: bookList, key: await Controller.requestKey()});
+  async componentDidMount() {
+    let bookList = await controller.fetchBooks();
+    this.setState({list: bookList, key: await controller.requestKey()});
   }
 
   submitState = async (title, author) =>{
-    let newBook = await Controller.submit(title, author);
-    let bookList = this.state.list;
-    bookList.push(newBook);
-    this.setState({list: bookList});
+    const newBook = await controller.submit(title, author);
+    const { list } = this.state;
+   
+    this.setState({list: list.concat([newBook])});
   }
 
-  deleteState = async (id) =>{
-    let bookList = this.state.list;
-    let newList = bookList.filter((book)=>book.id!==id);
-    await Controller.deleteBook(id);
-    this.setState({list: newList});
+  deleteState = async (id) => {
+    const { list } = this.state;
+    await controller.deleteBook(id);
+    this.setState({list: [...list.filter((book) => book.id !== id)]});
   }
 
-  changeFormShowState = ()=>{
+  changeFormShowState = () => {
     this.setState({showForm: !this.state.showForm})
     console.log(`showform = ${this.state.showForm}`);
   }
 
+  // Det här skulle BookItem kunna hålla reda på
+  // Behöver vi inte hantera listan på det här sättet
+
   editState = (id, title, author) =>{
-    let bookList = this.state.list;
-    let bookIndex;
-    for (let i = 0; i < bookList.length; i++){
-      if (bookList[i].id === id){
-        bookIndex = i;
-      }
-    }
-    Controller.edit(id, title, author);
-    bookList[bookIndex] = {id: id, title: title, author: author}
-    this.setState({list: bookList});
+    const { list } = this.state;
+    const bookIndex = list.findIndex(item => item.id === id)
+    controller.edit(id, title, author);
+    list[bookIndex] = { id, title, author }
+    this.setState({list: [...list]});
   }
 
   setNewKey = async () => {
-    Controller.setNewKey();
-    this.setState({key: await Controller.requestKey(), list: []});
+    controller.setNewKey();
+    this.setState({key: await controller.requestKey(), list: []});
 
   }
 

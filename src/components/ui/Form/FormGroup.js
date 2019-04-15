@@ -5,7 +5,13 @@ export default class BookItem extends Component{
 
     constructor(props){
         super(props);
-        this.state = {show: false};
+        // Se till att state som används i komponenten deklareras i konstruktor
+        // Introducera inte nya "on the fly"
+        this.state = {
+          show: false,
+          title: '',
+          author: ''
+        };
     }
 
 
